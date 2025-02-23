@@ -2,29 +2,47 @@ package com.bank.customer.service;
 
 import com.bank.customer.api.dto.request.CustomerRequest;
 import com.bank.customer.api.dto.response.CustomerResponse;
+import com.bank.customer.events.producer.CustomerEventProducer;
 import com.bank.customer.infra.mapper.CustomerMapper;
 import com.bank.customer.repository.entity.Customer;
 import com.bank.customer.repository.repos.CustomerRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+    private final CustomerEventProducer customerEventProducer;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public CustomerResponse createCustomer(CustomerRequest request) {
-        // Check if customer with the same legal_id already exists
         if (customerRepository.existsByLegalId(request.legalId())) {
             throw new IllegalArgumentException("A customer with this legal ID already exists.");
         }
 
         Customer customer = customerMapper.toEntity(request);
-        return customerMapper.toResponse(customerRepository.save(customer));
+        Customer savedCustomer = customerRepository.save(customer);
+
+        // Send event as JSON
+        Map<String, Object> event = Map.of(
+                "id", savedCustomer.getId(),
+                "name", savedCustomer.getName(),
+                "legalId", savedCustomer.getLegalId(),
+                "type", savedCustomer.getType(),
+                "address", savedCustomer.getAddress()
+        );
+
+        customerEventProducer.sendCustomerCreatedEvent(event);
+
+        return customerMapper.toResponse(savedCustomer);
     }
 
     public List<CustomerResponse> getAllCustomers() {
