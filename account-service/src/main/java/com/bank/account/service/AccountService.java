@@ -29,12 +29,8 @@ public class AccountService {
         Account account = accountMapper.toEntity(request);
         Account savedAccount = accountRepository.save(account);
 
-        // Send event to [event-service] after account creation
-        Map<String, Object> event = Map.of(
-                "customerId", savedAccount.getCustomerId(),
-                "accountType", savedAccount.getType()
-        );
-        accountEventProducer.sendAccountInitiateEvent(event);
+        // Send event to event-service after account creation
+        accountEventProducer.sendAccountInitiateEvent(savedAccount.getCustomerId(), savedAccount.getType());
 
         return accountMapper.toResponse(savedAccount);
     }

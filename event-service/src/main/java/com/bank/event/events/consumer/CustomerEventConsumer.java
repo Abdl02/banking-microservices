@@ -17,12 +17,10 @@ public class CustomerEventConsumer {
 
     @KafkaListener(topics = "customer-events", groupId = "banking-group")
     public void processCustomerEvent(CustomerCreatedEvent event) {
-        log.info("Processing customer created event: {}", event);
+        log.info("Processing Customer Created Event: {}", event);
 
-        // Create an AccountInitiateEvent
+        // Create a default account event and send it to Kafka
         AccountInitiateEvent accountEvent = new AccountInitiateEvent(event.getId(), "SALARY");
-
-        // Publish it to Kafka
         eventKafkaProducer.publishAccountInitiateEvent(accountEvent);
     }
 }

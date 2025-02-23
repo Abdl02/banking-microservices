@@ -31,16 +31,14 @@ public class CustomerService {
         Customer customer = customerMapper.toEntity(request);
         Customer savedCustomer = customerRepository.save(customer);
 
-        // Send event as JSON
-        Map<String, Object> event = Map.of(
-                "id", savedCustomer.getId(),
-                "name", savedCustomer.getName(),
-                "legalId", savedCustomer.getLegalId(),
-                "type", savedCustomer.getType(),
-                "address", savedCustomer.getAddress()
+        // Send event to Event Service after customer creation
+        customerEventProducer.sendCustomerCreatedEvent(
+                savedCustomer.getId(),
+                savedCustomer.getName(),
+                savedCustomer.getLegalId(),
+                savedCustomer.getType(),
+                savedCustomer.getAddress()
         );
-
-        customerEventProducer.sendCustomerCreatedEvent(event);
 
         return customerMapper.toResponse(savedCustomer);
     }
