@@ -3,6 +3,7 @@ package com.bank.customer.service;
 import com.bank.customer.api.dto.request.CustomerRequest;
 import com.bank.customer.api.dto.response.CustomerResponse;
 import com.bank.customer.events.producer.CustomerEventProducer;
+import com.bank.customer.infra.exception.CustomerNotFoundException;
 import com.bank.customer.infra.mapper.CustomerMapper;
 import com.bank.customer.repository.entity.Customer;
 import com.bank.customer.repository.repos.CustomerRepository;
@@ -52,6 +53,6 @@ public class CustomerService {
     public CustomerResponse getCustomerById(Long id) {
         return customerRepository.findById(id)
                 .map(customerMapper::toResponse)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new CustomerNotFoundException(id));
     }
 }

@@ -3,6 +3,7 @@ package com.bank.account.service;
 import com.bank.account.api.dto.request.AccountRequest;
 import com.bank.account.api.dto.response.AccountResponse;
 import com.bank.account.events.producer.AccountEventProducer;
+import com.bank.account.infra.exception.AccountNotFoundException;
 import com.bank.account.infra.mapper.AccountMapper;
 import com.bank.account.repository.entity.Account;
 import com.bank.account.repository.repos.AccountRepository;
@@ -44,7 +45,7 @@ public class AccountService {
     public AccountResponse getAccountById(Long id) {
         return accountRepository.findById(id)
                 .map(accountMapper::toResponse)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
+                .orElseThrow(() -> new AccountNotFoundException(id));
     }
 
     // New method to handle account creation when an event is received
