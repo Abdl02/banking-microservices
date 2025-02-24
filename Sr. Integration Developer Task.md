@@ -63,6 +63,3 @@ This project meets **all** the functional and technical requirements, including 
 🚀 **Next Steps (Optional):** Implement full **JWT authentication** to enhance security.
 
 ---
-
-## 📜 **License**
-Licensed under the **Apache 2.0 License**. See `LICENSE` for details.
