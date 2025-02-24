@@ -202,7 +202,7 @@ The system is composed of multiple microservices, including:
 Swagger is integrated using **Springdoc OpenAPI** to automatically generate API documentation.
 - To access the Swagger UI, navigate to:
 ```
-http://localhost:8081/swagger-ui/index.html // For Cutomer Serivce
+http://localhost:8081/swagger-ui/index.html // For Customer Serivce
 ```
 
 ```
@@ -215,7 +215,7 @@ http://localhost:8082/swagger-ui/index.html // For Account Service
 The **H2 Database** Console is available for accessing and managing the in-memory database for each microservice.
 - To access the H2 Database Console, navigate to:
 ```
-http://localhost:8081/db-console // For Cutomer Serivce
+http://localhost:8081/db-console // For Customer Serivce
 ```
 
 ```
