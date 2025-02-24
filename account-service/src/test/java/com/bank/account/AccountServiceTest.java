@@ -20,6 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for {@link AccountService}.
+ * <p>
+ * Tests various account operations including account creation, retrieval,
+ * and event-driven actions.
+ * </p>
+ */
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
 
@@ -39,6 +46,9 @@ class AccountServiceTest {
     private Account account;
     private AccountResponse accountResponse;
 
+    /**
+     * Initializes test data before each test execution.
+     */
     @BeforeEach
     void setUp() {
         accountRequest = new AccountRequest(
@@ -75,6 +85,10 @@ class AccountServiceTest {
         lenient().when(accountRepository.save(any(Account.class))).thenReturn(account);
     }
 
+    /**
+     * Tests successful account creation.
+     * Ensures that an account is persisted and an event is triggered.
+     */
     @Test
     void testCreateAccount_Success() {
         when(accountRepository.findByCustomerId(anyLong())).thenReturn(List.of()); // No existing accounts
@@ -94,6 +108,9 @@ class AccountServiceTest {
         assertEquals(100.0, response.balance());
     }
 
+    /**
+     * Tests retrieval of all accounts.
+     */
     @Test
     void testGetAllAccounts() {
         when(accountRepository.findAll()).thenReturn(List.of(account));

@@ -20,6 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for {@link CustomerService}.
+ * <p>
+ * These tests verify customer-related operations such as creation, retrieval,
+ * and event emission using Mockito for dependency isolation.
+ * </p>
+ */
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {
 
@@ -39,6 +46,9 @@ class CustomerServiceTest {
     private Customer customer;
     private CustomerResponse customerResponse;
 
+    /**
+     * Sets up test data before each test execution.
+     */
     @BeforeEach
     void setUp() {
         customerRequest = new CustomerRequest(
@@ -73,6 +83,10 @@ class CustomerServiceTest {
         lenient().when(customerRepository.save(any(Customer.class))).thenReturn(customer);
     }
 
+    /**
+     * Tests successful customer creation.
+     * Ensures that a new customer is saved and an event is emitted.
+     */
     @Test
     void testCreateCustomer_Success() {
         when(customerRepository.existsByLegalId(anyString())).thenReturn(false);
@@ -94,6 +108,10 @@ class CustomerServiceTest {
         assertEquals("John Doe", response.name());
     }
 
+
+    /**
+     * Tests retrieval of all customers.
+     */
     @Test
     void testGetAllCustomers() {
         when(customerRepository.findAll()).thenReturn(List.of(customer));
