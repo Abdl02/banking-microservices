@@ -2,6 +2,7 @@ package com.bank.account;
 
 import com.bank.account.api.dto.request.AccountRequest;
 import com.bank.account.api.dto.response.AccountResponse;
+import com.bank.account.events.producer.AccountEventProducer;
 import com.bank.account.infra.mapper.AccountMapper;
 import com.bank.account.repository.entity.Account;
 import com.bank.account.repository.repos.AccountRepository;
@@ -27,6 +28,9 @@ class AccountServiceTest {
 
     @Mock
     private AccountMapper accountMapper;
+
+    @Mock
+    private AccountEventProducer accountEventProducer;
 
     @InjectMocks
     private AccountService accountService;
@@ -63,17 +67,28 @@ class AccountServiceTest {
                 1234567L
         );
 
-        // Using lenient() to avoid unnecessary stubbing errors
+        /*
+          Mocking repository and mapper behavior
+         */
         lenient().when(accountMapper.toEntity(any(AccountRequest.class))).thenReturn(account);
         lenient().when(accountMapper.toResponse(any(Account.class))).thenReturn(accountResponse);
+        lenient().when(accountRepository.save(any(Account.class))).thenReturn(account);
     }
 
     @Test
     void testCreateAccount_Success() {
+        when(accountRepository.findByCustomerId(anyLong())).thenReturn(List.of()); // No existing accounts
         when(accountRepository.save(any(Account.class))).thenReturn(account);
-        when(accountMapper.toResponse(any(Account.class))).thenReturn(accountResponse);
 
         AccountResponse response = accountService.createAccount(accountRequest);
+
+        /*
+          Verify event producer was called
+         */
+        verify(accountEventProducer, times(1)).sendAccountInitiateEvent(
+                account.getCustomerId(),
+                account.getType()
+        );
 
         assertEquals("1234567890", response.accountNumber());
         assertEquals(100.0, response.balance());
@@ -82,7 +97,6 @@ class AccountServiceTest {
     @Test
     void testGetAllAccounts() {
         when(accountRepository.findAll()).thenReturn(List.of(account));
-        when(accountMapper.toResponse(any(Account.class))).thenReturn(accountResponse);
 
         List<AccountResponse> response = accountService.getAllAccounts();
 

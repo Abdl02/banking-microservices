@@ -2,6 +2,7 @@ package com.bank.customer;
 
 import com.bank.customer.api.dto.request.CustomerRequest;
 import com.bank.customer.api.dto.response.CustomerResponse;
+import com.bank.customer.events.producer.CustomerEventProducer;
 import com.bank.customer.infra.mapper.CustomerMapper;
 import com.bank.customer.repository.entity.Customer;
 import com.bank.customer.repository.repos.CustomerRepository;
@@ -17,8 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {
@@ -28,6 +28,9 @@ class CustomerServiceTest {
 
     @Mock
     private CustomerMapper customerMapper;
+
+    @Mock
+    private CustomerEventProducer customerEventProducer;
 
     @InjectMocks
     private CustomerService customerService;
@@ -39,7 +42,7 @@ class CustomerServiceTest {
     @BeforeEach
     void setUp() {
         customerRequest = new CustomerRequest(
-                "1234567890",
+                "1234567",
                 "John Doe",
                 "1234567",
                 "RETAIL",
@@ -62,16 +65,31 @@ class CustomerServiceTest {
                 "NY"
         );
 
-        // Mocking mapping behavior
+        /*
+          Mocking repository and mapper behavior
+         */
         lenient().when(customerMapper.toEntity(any(CustomerRequest.class))).thenReturn(customer);
         lenient().when(customerMapper.toResponse(any(Customer.class))).thenReturn(customerResponse);
+        lenient().when(customerRepository.save(any(Customer.class))).thenReturn(customer);
     }
 
     @Test
     void testCreateCustomer_Success() {
+        when(customerRepository.existsByLegalId(anyString())).thenReturn(false);
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
         CustomerResponse response = customerService.createCustomer(customerRequest);
+
+        /*
+          Verify event producer was called
+         */
+        verify(customerEventProducer, times(1)).sendCustomerCreatedEvent(
+                customer.getId(),
+                customer.getName(),
+                customer.getLegalId(),
+                customer.getType(),
+                customer.getAddress()
+        );
 
         assertEquals("John Doe", response.name());
     }

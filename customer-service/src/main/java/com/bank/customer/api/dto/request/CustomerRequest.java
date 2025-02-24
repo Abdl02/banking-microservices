@@ -2,6 +2,10 @@ package com.bank.customer.api.dto.request;
 
 import jakarta.validation.constraints.*;
 
+
+/**
+ * Data Transfer Object (DTO) for customer creation requests.
+ */
 public record CustomerRequest (
         @Size(min = 7, max = 7, message = "Customer ID must be exactly 7 digits")
         String customerId,
