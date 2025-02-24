@@ -198,6 +198,32 @@ The system is composed of multiple microservices, including:
 
 ---
 
+## 📜 **Swagger Documentation**
+Swagger is integrated using **Springdoc OpenAPI** to automatically generate API documentation.
+- To access the Swagger UI, navigate to:
+```
+http://localhost:8081/swagger-ui/index.html // For Cutomer Serivce
+```
+
+```
+http://localhost:8082/swagger-ui/index.html // For Account Service
+```
+
+---
+
+## 🗄️ **Database Console**
+The **H2 Database** Console is available for accessing and managing the in-memory database for each microservice.
+- To access the H2 Database Console, navigate to:
+```
+http://localhost:8081/db-console // For Cutomer Serivce
+```
+
+```
+http://localhost:8082/db-console // For Account Service
+```
+
+---
+
 ## 🛠 **How to Run Locally**
 
 ### Prerequisites
@@ -259,7 +285,6 @@ mvn test
 
 - Implement **JWT-based authentication**.
 - Integrate **external databases** for persistence.
-- Expand event-driven architecture for **real-time notifications**.
 
 ---
 

@@ -15,11 +15,25 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
  *
  * TODO: using JWT
  */
+
+/**
+ * Security configuration using Spring Security.
+ * <p>
+ * Configures authentication, authorization, and disables CSRF.
+ * </p>
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(jsr250Enabled = true)
 public class WebSecurityConfigurer {
 
+    /**
+     * Configures the security filter chain.
+     *
+     * @param http The security configuration.
+     * @return The security filter chain.
+     * @throws Exception If security configuration fails.
+     */
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
 

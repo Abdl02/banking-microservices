@@ -85,13 +85,11 @@ public class AccountService {
      */
     @Transactional
     public void createDefaultAccountForCustomer(Long customerId, String accountType) {
-        // Check if customer already has 10 accounts
         List<Account> existingAccounts = accountRepository.findByCustomerId(customerId);
         if (existingAccounts.size() >= 10) {
             throw new IllegalStateException("A customer can have a maximum of 10 accounts.");
         }
 
-        // Create a default account
         Account newAccount = Account.builder()
                 .accountNumber(generateAccountNumber())
                 .balance(0.0)
