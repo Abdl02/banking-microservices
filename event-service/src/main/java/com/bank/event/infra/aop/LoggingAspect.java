@@ -12,9 +12,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggingAspect {
 
+    /**
+     * Pointcut to match all service methods in the application.
+     */
     @Pointcut("execution(* com.bank.*.service.*.*(..))")
     public void serviceMethods() {}
 
+    /**
+     * Logs method execution time for all service methods.
+     *
+     * @param joinPoint The method join point.
+     * @return The result of the method execution.
+     * @throws Throwable If an error occurs during method execution.
+     */
     @Around("serviceMethods()")
     public Object logMethodExecution(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
