@@ -21,7 +21,6 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
     private final CustomerEventProducer customerEventProducer;
-    private final ObjectMapper objectMapper;
 
     @Transactional
     public CustomerResponse createCustomer(CustomerRequest request) {
