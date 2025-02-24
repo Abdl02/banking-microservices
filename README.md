@@ -19,6 +19,8 @@ The system is composed of multiple microservices, including:
 - Create, update, and retrieve bank accounts.
 - Enforce a limit on the number of accounts per customer.
 - Integrated event-driven notifications on account creation.
+- **Custom Query Methods using Spring Data JPA**
+- **JDBI for optimized SQL queries**
 
 ### 👤 **Customer Service**
 
@@ -50,6 +52,11 @@ The system is composed of multiple microservices, including:
 - Centralized exception management with meaningful error responses.
 - Custom exceptions such as `AccountNotFoundException` and `CustomerNotFoundException`.
 
+### 📊 **Aspect-Oriented Programming (AOP) for Logging**
+- Added **Spring AOP** to log method executions in the service layer.
+- Logs method entry, execution time, and method exit.
+- Improves debugging and performance monitoring.
+
 ---
 
 ## 🏗 **Technology Stack**
@@ -60,12 +67,14 @@ The system is composed of multiple microservices, including:
 | Spring Boot       | Main framework for microservices            |
 | Spring Security   | Security for authentication & authorization |
 | Spring Data JPA   | ORM for database operations                 |
+| JDBI             | Lightweight SQL handling                     |
 | Feign Client      | Communication between microservices         |
 | Apache Kafka      | Event streaming and message processing      |
 | H2 Database       | In-memory database for development          |
 | MapStruct         | DTO to entity mapping                       |
 | JUnit 5 & Mockito | Unit testing                                |
 | Swagger UI        | API documentation                           |
+| Spring AOP        | Aspect-Oriented Programming for logging     |
 
 ---
 
@@ -83,6 +92,7 @@ The system is composed of multiple microservices, including:
 │   │   ├── exception         # Custom exceptions
 │   │   ├── security          # Security config
 │   │   ├── mapper            # DTO to entity mappers
+│   │   ├── aop               # Logging aspects (NEW)
 │   ├── AccountServiceApplication.java
 │   ├── application.yml       # Configurations
 │   └── Dockerfile            # Dockerization
@@ -110,6 +120,9 @@ The system is composed of multiple microservices, including:
 | **Event-Driven Architecture (EDA)** | Kafka-based events for asynchronous processing                            |
 | **Strategy Pattern**                | Handles different types of accounts dynamically                           |
 | **Circuit Breaker (Resilience4j)**  | Ensures system resilience by handling failures in Feign Clients           |
+| **Aspect-Oriented Programming (AOP)** | Logs method execution in the service layer                              |
+
+---
 
 ### 🛠 **Clean Code Practices**
 
