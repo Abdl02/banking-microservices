@@ -41,6 +41,7 @@ The system is composed of multiple microservices, including:
 ### 📜 **API Documentation**
 
 - **Swagger UI** integrated for clear API visualization and testing.
+- **JavaDocs** are added across all layers to enhance code readability and maintainability.
 
 ### 📦 **Data Persistence**
 
@@ -56,6 +57,13 @@ The system is composed of multiple microservices, including:
 - Added **Spring AOP** to log method executions in the service layer.
 - Logs method entry, execution time, and method exit.
 - Improves debugging and performance monitoring.
+
+### 🧪 **Professional Testing Approach**
+
+- Unit tests are structured professionally using **JUnit 5 & Mockito**.
+- Each test class contains **JavaDocs** explaining its purpose and behavior.
+- Mocks are used to isolate dependencies and validate method interactions.
+- **Behavior-Driven Testing (BDD)** ensures real-world scenario coverage.
 
 ---
 
@@ -234,7 +242,11 @@ docker run -p 8081:8081 customer-service
 
 ## 🔬 **Testing**
 
-Unit tests are implemented using **JUnit 5 & Mockito**.
+- Tests follow a **structured approach** with **clear JavaDocs** for each class and method.
+- **Mockito** is used to mock dependencies and verify method interactions.
+- **Event-driven tests** ensure Kafka-based event flows work correctly.
+- Coverage includes **unit tests**, **integration tests**, and **exception handling scenarios**.
+
 Run tests with:
 
 ```sh
