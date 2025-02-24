@@ -252,16 +252,23 @@ cd event-service && mvn spring-boot:run
 
 ## 📦 **Docker Support**
 
-Each service contains a **Dockerfile** for containerization:
+The project includes **Docker Compose** for containerized deployment of all microservices, along with **Kafka** and **Zookeeper** for event-driven communication.
 
+### 🚀 **Running the Services**
+
+To build and start all services, simply run:
 ```sh
-# Build and run the Account Service container
-docker build -t account-service ./account-service
-docker run -p 8082:8082 account-service
+docker-compose up --build
+```
+This will:
+- Each service contains a **Dockerfile** for containerization.
+- Build and start **Customer Service**, **Account Service**, and **Event Service** containers.
+- Start **Kafka** and **Zookeeper** for event streaming.
+- Automatically set up the required environment variables.
 
-# Build and run the Customer Service container
-docker build -t customer-service ./customer-service
-docker run -p 8081:8081 customer-service
+To stop the services, use:
+```sh
+docker-compose down
 ```
 
 ---
@@ -295,6 +302,5 @@ mvn test
 
 ---
 
-## 📜 **License**
 
-Licensed under the **Apache 2.0 License**. See `LICENSE` for details.
+
