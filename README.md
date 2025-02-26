@@ -11,6 +11,8 @@ The system is composed of multiple microservices, including:
 - **Account Service**: Manages bank accounts.
 - **Customer Service**: Handles customer data.
 - **Event Service**: Listens and processes banking events.
+- **Discovery Service**: Eureka Server for service registration and discovery.
+- **Gateway Service**: API Gateway for routing and load balancing.
 
 ## Features
 
@@ -32,6 +34,17 @@ The system is composed of multiple microservices, including:
 
 - Uses **Apache Kafka** to handle banking-related events.
 - Triggers actions based on customer creation and account initialization.
+
+### 🔍 **Discovery Service (Eureka Server)**
+
+- Acts as a service registry to discover and register microservices dynamically.
+- Enables load balancing and resilience within the microservices architecture.
+
+### 🚪 **Gateway Service (Spring Cloud Gateway)**
+
+- Routes API requests to the appropriate microservices.
+- Provides a single entry point for all client requests.
+- Enhances security, logging, and monitoring.
 
 ### 🔐 **Security**
 
@@ -100,7 +113,7 @@ The system is composed of multiple microservices, including:
 │   │   ├── exception         # Custom exceptions
 │   │   ├── security          # Security config
 │   │   ├── mapper            # DTO to entity mappers
-│   │   ├── aop               # Logging aspects (NEW)
+│   │   ├── aop               # Logging aspects
 │   ├── AccountServiceApplication.java
 │   ├── application.yml       # Configurations
 │   └── Dockerfile            # Dockerization
@@ -108,9 +121,38 @@ The system is composed of multiple microservices, including:
 │   ├── Similar structure as account-service
 ├── event-service
 │   ├── Handles Kafka-based event processing
+├── discovery-service
+│   ├── Eureka Server Configuration
+├── gateway-service
+│   ├── Spring Cloud Gateway Configuration
 └── README.md
 ```
 
+---
+
+## 🌍 **API Gateway (Spring Cloud Gateway) and Service Discovery (Eureka)**
+
+### ✅ **Gateway Configuration**
+
+- Routes requests dynamically using **Spring Cloud Gateway**.
+- Example routes:
+  ```yaml
+  spring.cloud.gateway.routes[0].id=customer-service
+  spring.cloud.gateway.routes[0].uri=http://localhost:8081
+  spring.cloud.gateway.routes[0].predicates[0]=Path=/api/customers/**
+
+  spring.cloud.gateway.routes[1].id=account-service
+  spring.cloud.gateway.routes[1].uri=http://localhost:8082
+  spring.cloud.gateway.routes[1].predicates[0]=Path=/api/accounts/**
+  ```
+
+### ✅ **Eureka Service Discovery**
+
+- Registers all microservices dynamically.
+- Configured in each service:
+  ```properties
+  eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+  ```
 ---
 
 ## 🏗 **Design Patterns & Clean Code Principles**
@@ -243,6 +285,8 @@ cd banking-microservices
 mvn clean install
 
 # Start services
+cd discovery-service && mvn spring-boot:run
+cd gateway-service && mvn spring-boot:run
 cd account-service && mvn spring-boot:run
 cd customer-service && mvn spring-boot:run
 cd event-service && mvn spring-boot:run
@@ -262,7 +306,7 @@ To build and start all services, simply run:
 docker-compose up --build
 ```
 This will:
-- Build and start **Customer Service**, **Account Service**, and **Event Service** containers.
+- Build and start **Customer Service**, **Account Service**, **Event Service**, **Discovery Service**, and **Gateway Service**.
 - Start **Kafka** and **Zookeeper** for event streaming.
 - Automatically set up the required environment variables.
 
@@ -301,6 +345,3 @@ mvn test
 - Contributions are welcome! Submit a pull request.
 
 ---
-
-
-

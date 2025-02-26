@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * Provides REST API communication between Account Service and Customer Service.
  * </p>
  */
-@FeignClient(name = "customer-service", url = "http://localhost:8081")
+@FeignClient(name = "customer-service")
 public interface CustomerClient {
 
     /**

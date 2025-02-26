@@ -1,5 +1,27 @@
 version: '3.8'
 services:
+  discovery-service:
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile-discovery
+    container_name: discovery-service
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  gateway-service:
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile-gateway
+    container_name: gateway-service
+    ports:
+      - "8765:8765"
+    depends_on:
+      - discovery-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
 
   account-service:
     build:
@@ -11,9 +33,11 @@ services:
     depends_on:
       - customer-service
       - kafka
+      - discovery-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
 
   customer-service:
     build:
@@ -24,9 +48,11 @@ services:
       - "8081:8081"
     depends_on:
       - kafka
+      - discovery-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
 
   event-service:
     build:
@@ -37,9 +63,11 @@ services:
       - "8083:8083"
     depends_on:
       - kafka
+      - discovery-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
 
   zookeeper:
     image: wurstmeister/zookeeper

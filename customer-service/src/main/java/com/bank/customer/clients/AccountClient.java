@@ -12,7 +12,7 @@ import java.util.List;
  * Provides REST API communication between Customer Service and Account Service.
  * </p>
  */
-@FeignClient(name = "account-service", url = "http://localhost:8082")
+@FeignClient(name = "account-service")
 public interface AccountClient {
 
     /**
